@@ -94,6 +94,9 @@ class Coroutine:
         for input_ in self.inputs:
             input_.value = None
 
+    def __next__(self):
+        self.run_if_inputs_satisfied()
+
 
 def wire(a, b):
     a.outputs.append(b)
