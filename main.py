@@ -54,15 +54,26 @@ def test_vector_checker(expected):
     while True:
         for e in expected:
             x = yield
-            print("Got {}, expected {}".format(x, e))
             assert x == e
+
+
+@coroutine
+def printer():
+    while True:
+        for e in expected:
+            x = yield
+            print(x, end=" ")
 
 
 if __name__ == "__main__":
     inputs = [1, 0, 0, 1, 1, 0, 1, 1, 0]
-    expected = [0] + inputs
+    expected = [0] + inputs[:-1]
     reg4 = DefineReg(4)()
     checker = test_vector_checker(expected)
+    printer = printer()
     wire(reg4.output, checker)
+    wire(reg4.output, printer)
+    print("Expected : {}".format(" ".join(str(x) for x in expected)))
+    print("Actual   : ", end="")
     for i in inputs:
         reg4.send(i)
