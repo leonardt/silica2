@@ -29,7 +29,9 @@ class Checker(Coroutine):
     def __init__(self, expected):
         self.expected = expected
         super().__init__()  # super has to be called after adding fields for
-                            # the coroutine to be able to acces them?
+                            # the coroutine to be able to acces them because
+                            # the coroutine is initialized during the super
+                            # class init call
 
     def definition(self):
         while True:
