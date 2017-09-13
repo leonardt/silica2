@@ -3,12 +3,26 @@
 #
 # A decorator function that takes care of starting a coroutine
 # automatically on call.
+import types
+
+class Coroutine():
+    def __init__(self, co):
+        self.co = co
+        self.running = False
+
+    def send(self, *args, **kwargs):
+        if self.running is False:
+            next(self.co)
+            self.running = True
+        return self.co.send(*args, **kwargs)
+
 
 def coroutine(func):
     def start(*args,**kwargs):
-        cr = func(*args,**kwargs)
-        next(cr)
-        return cr
+        # cr = func(*args,**kwargs)
+        # next(cr)
+        cr = types.coroutine(func)(*args,**kwargs)
+        return Coroutine(cr)
     return start
 
 # Example use
