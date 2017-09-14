@@ -6,8 +6,6 @@ import numpy as np
 
 class Fifo:
     def __init__(self, depth=2, width=None):
-        self.depth = depth
-        self.width = width
         if width is None:
             self._values = np.ndarray(depth, np.bool)
         else:
