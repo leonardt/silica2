@@ -1,23 +1,23 @@
 import types
 
-class Coroutine():
-    def __init__(self, co):
-        self.co = co
-        self.running = False
-
-    def send(self, *args, **kwargs):
-        if self.running is False:
-            next(self.co)
-            self.running = True
-        return self.co.send(*args, **kwargs)
-
-    def __next__(self):
-        self.running = True
-        return next(self.co)
-
 
 def coroutine(func):
-    def start(*args,**kwargs):
-        cr = types.coroutine(func)(*args,**kwargs)
-        return Coroutine(cr)
-    return start
+    class Coroutine:
+        def __init__(self, *args, **kwargs):
+            self.definition = func
+            self.internal_values = {}
+            self.reset(*args, **kwargs)
+
+        def reset(self, *args, **kwargs):
+            self.co = types.coroutine(self.definition)(*args, **kwargs)
+            next(self.co)
+
+        def __getattr__(self, key):
+            return self.co.gi_frame.f_locals[key]
+
+        def send(self, *args, **kwargs):
+            return self.co.send(*args, **kwargs)
+
+        def __next__(self):
+            return next(self.co)
+    return Coroutine
