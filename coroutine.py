@@ -11,6 +11,10 @@ class Coroutine():
             self.running = True
         return self.co.send(*args, **kwargs)
 
+    def __next__(self):
+        self.running = True
+        return next(self.co)
+
 
 def coroutine(func):
     def start(*args,**kwargs):

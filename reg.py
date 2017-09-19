@@ -4,12 +4,15 @@ init = 0
 
 @coroutine
 def Reg():
-    value1 = value2 = 0
+    curr_value = next_value = 0
     while True:
-        value1 = yield value1
-        value2 = yield value2
+        tmp = yield curr_value
+        curr_value, next_value = next_value, tmp
 
 reg = Reg()
-print(reg.send(1))
-print(reg.send(2))
-print(reg.send(3))
+print("Input 1, Output {}".format(reg.send(1)))
+print("Input 0, Output {}".format(reg.send(0)))
+print("Input 0, Output {}".format(reg.send(0)))
+print("Input 1, Output {}".format(reg.send(1)))
+print("Input 1, Output {}".format(reg.send(1)))
+print("Input 1, Output {}".format(reg.send(1)))
