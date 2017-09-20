@@ -6,6 +6,6 @@ def TFF():
     reg = Reg()
     O = reg.value
     while True:
-        I = yield
+        I = yield O
         O = reg.value
         reg.send(I ^ O)
